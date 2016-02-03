@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HBase Counter App</title>
+  <link rel="stylesheet" href="/bootstrap.min.css">
+  <script src="/jquery-1.12.0.min.js"></script>
+  <script src="/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4"><p class="lead" id="counter-ctc">0</p></div>
+    <div class="col-md-4"><p class="lead" id="counter-lc">0</p></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4"><img src="/ctc.png" id="ctc"></div>
+    <div class="col-md-4"><img src="/lc.png" id="lc"></div>
+  </div>
+</div>
+
+<script>
+  function updateCounter(counterName) {
+    $.get( "/UpdateCounter", { counter: counterName } ).done(function( data ) {
+      console.log(data);
+      $("#counter-ctc").text(data.ctc);
+      $("#counter-lc").text(data.lc);
+    }).fail(function (xhr, status, error) {
+      console.log(status);
+      console.log(error);
+    });
+  }
+  function pollCounters() {
+    $.get( "/UpdateCounter").done(function( data ) {
+      console.log(data);
+      $("#counter-ctc").text(data.ctc);
+      $("#counter-lc").text(data.lc);
+    }).fail(function (xhr, status, error) {
+      console.log(status);
+      console.log(error);
+    });
+    window.setTimeout(pollCounters, 1000);
+  }
+  $( "#ctc" ).click(function() {
+    updateCounter("ctc");
+  });
+  $( "#lc" ).click(function() {
+    updateCounter("lc");
+  });
+  $(function() {
+    pollCounters();
+  });
+
+</script>
+
+</body>
+</html>
