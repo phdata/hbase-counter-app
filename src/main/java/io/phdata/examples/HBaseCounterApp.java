@@ -1,5 +1,7 @@
 package io.phdata.examples;
 
+import java.net.InetAddress;
+
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
@@ -13,10 +15,8 @@ import org.mortbay.jetty.servlet.ServletMapping;
 
 public class HBaseCounterApp {
   public static void main(String[] args) throws Exception {
-    int port = 8091;
-    if (args.length > 0) {
-      Integer.parseInt(args[0]);
-    }
+    int port = 8000 + (int)(Math.random() * 24000);
+    System.out.println("URL: http://" + InetAddress.getLocalHost().getHostName() + ":" + port);
     String webDir = HBaseCounterApp.class.getClassLoader().getResource("io/phdata/examples/webapp").toExternalForm();
     ResourceHandler resourceHandler = new ResourceHandler();
     resourceHandler.setWelcomeFiles(new String[]{"index.html"});
